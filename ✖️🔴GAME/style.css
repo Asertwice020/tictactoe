@@ -1,0 +1,78 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+  font-family: sans-serif;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 10px;
+  scroll-behavior: smooth;
+}
+
+body {
+  position: relative;
+  background-color: #00ffa6;
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+}
+
+#game_wrapper {
+  max-width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.game_container {
+  --square: clamp(120px, 84vw + 1rem, 500px);
+  --square_init: calc(var(--square) * 0.333);
+  --square_commit: calc(var(--square_init) + 0.02rem);
+  width: var(--square);
+  height: var(--square);
+  background-color: black;
+  display: grid;
+  grid-template-columns: repeat(3, var(--square_commit));
+  grid-template-rows: repeat(3, var(--square_commit));
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(45px, 14vw + 1rem, 95px);
+  font-weight: 700;
+}
+
+.box:nth-child(1) {
+  background-color: #ffabab;
+}
+.box:nth-child(2) {
+  background-color: #9a9aff;
+}
+.box:nth-child(3) {
+  background-color: lightgreen;
+}
+.box:nth-child(4) {
+  background-color: lightskyblue;
+}
+.box:nth-child(5) {
+  background-color: rgb(255, 255, 148);
+}
+.box:nth-child(6) {
+  background-color: rgb(174, 240, 240);
+}
+.box:nth-child(7) {
+  background-color: #6577ab;
+}
+.box:nth-child(8) {
+  background-color: rgb(228, 184, 140);
+}
+.box:nth-child(9) {
+  background-color: rgb(255, 108, 138);
+}
