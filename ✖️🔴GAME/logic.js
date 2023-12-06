@@ -1,4 +1,6 @@
-const gameContainer = document.querySelector('.game_container');
+'use strict';
+function initializeGame() {
+  const gameContainer = document.querySelector('.game_container');
 const boxes = [...gameContainer.children];
 
 let winCard;
@@ -89,3 +91,6 @@ function checkWinner() {
 }
 
 gameContainer.addEventListener('click', playMove);
+}
+
+initializeGame();
