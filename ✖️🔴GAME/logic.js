@@ -1,87 +1,91 @@
 const gameContainer = document.querySelector('.game_container');
-const boxes = Array.from(gameContainer.children);
-let checkResult = false;
-let gameOver = false;
-let filledBoard;
+const boxes = [...gameContainer.children];
 
-function playerClicked() {
-  gameContainer.addEventListener('click', dynamicChanges)
+let winCard;
+let restartBtn;
+let gameOverWindow;
+let currentPlayer = 'X';
+let gameOver = false;
+
+function restartGame() {
+  restartBtn.addEventListener('click', instructionsToRestart)
 }
 
-function dynamicChanges(event) {
-  let boardData = event.target.closest('.box')
+function instructionsToRestart() {
+  if(gameOver === true) {
+    gameOver = false;
+    for (const box of boxes) box.innerText = '';
+    currentPlayer = 'X';
+    gameOverWindow.remove();
+  }
+}
+
+// THIS FUNCTION IS RESPONSIBLE TO: CREATING GAME OVER WINDOW AND PERFORM THE ELEMETS WORKINGS.
+function createGamoOverWindow(playerSymbol1) {
+  // PLAYER SYMBOL CARD
+  winCard = document.createElement('div');
+  winCard.className = `win_card`;
+  getResult(playerSymbol1);
+
+  // RESTART BUTTON
+  restartBtn = document.createElement('button');
+  restartBtn.className = `restart_btn`;
+  restartBtn.innerText = `RESTART`;
+
+  // PARENT ELEMENT OF THESE ABOVE 2
+  gameOverWindow = document.createElement('div');
+  gameOverWindow.id = `game_over_window`;
   
-  if(!gameOver) {
-    boardData.innerText = `X`;
-    gameOver = true;
+  addGameOverWindow();
+}
+
+function addGameOverWindow() {
+    // APPENDING CHILDS IN THE PARENT ELEMENT
+    gameOverWindow.append(winCard, restartBtn);
+
+    // APPENDING PARENT ELEMENT IN THE GAMECONTAINER
+    gameContainer.append(gameOverWindow);
+}
+
+function getResult(playerSymbol2) {
+  if(playerSymbol2 !== `It's a Draw!`) {
+    winCard.innerText = `${playerSymbol2} won`;
   }
   else {
-    boardData.innerText = `O`;
-    gameOver = false;
-  }
-  var sumit = boxes.map( (item) => {
-    return item.innerText;
-  } );
-}
-
-function filterBoard() {
-  filledBoard = boxes.map( (item) => {
-    item.innerText != '';
-    // return checkResult = true;
-    console.log(filledBoard);
-  })
-  
-  
-  if(checkResult) {
-    console.log(`hello are you waiting for me?`);
-    checkWinner(filledBoard);
+    winCard.innerText = `${playerSymbol2}`
   }
 }
 
-playerClicked()
-checkWinner(sumit)
-
-function checkWinner(board) {
-  console.log(board);
-  // Check rows
-  for (let i = 0; i < 3; i++) {
-      if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] !== '') {
-          return board[i][0];
-      }
+function playMove(event) {
+  if (!gameOver && event.target.innerText === '') {
+    event.target.innerText = currentPlayer;
+    currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
+    checkWinner();
   }
-
-  // Check columns
-  for (let i = 0; i < 3; i++) {
-      if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] !== '') {
-          return board[0][i];
-      }
-  }
-
-  // Check diagonals
-  if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] !== '') {
-      return board[0][0];
-  }
-
-  if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] !== '') {
-      return board[0][2];
-  }
-  
-  console.log('win or lose but, result is here...');
-  // If no winner
-  return console.log('unfortunately, match drawn');;
 }
 
-// Example board
-// const board = [
-//   ['X', 'O', 'X'],
-//   ['O', 'X', 'O'],
-//   ['X', 'X', 'O']
-// ];
+function checkWinner() {
+  const winningCombinations = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+    [0, 4, 8], [2, 4, 6]             // Diagonals
+  ];
 
-// const winner = checkWinner(board);
+  for (const combination of winningCombinations) {
+    const [a, b, c] = combination;
+    if (boxes[a].innerText && boxes[a].innerText === boxes[b].innerText && boxes[b].innerText === boxes[c].innerText) {
+      gameOver = true;
+      createGamoOverWindow(boxes[a].innerText);
+      restartGame();
+      return;
+    }
+  }
 
-// if (winner) {
-//   console.log(`Player ${winner} wins!`);
-// } else {
-//   console.log("It's a draw or the game is ongoing.");
-// }
+  if (boxes.every(box => box.innerText !== '')) {
+    gameOver = true;
+    createGamoOverWindow(`It's a Draw!`);
+    restartGame();
+  }
+}
+
+gameContainer.addEventListener('click', playMove);

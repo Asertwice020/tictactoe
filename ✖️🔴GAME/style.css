@@ -27,13 +27,43 @@ body {
   position: relative;
 }
 
+h1 {
+  --h1_fos: clamp(2.7rem, 3vw + 0.5rem, 5rem);
+  --h1_height: clamp(4.3rem, 4vw + 1.1rem, 6.4rem);
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  font-size: var(--h1_fos);
+  height: var(--h1_height);
+  font-weight: 900;
+  background: linear-gradient(45deg, crimson, hotpink, #5f0a5f, hotpink, indigo);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 300%;
+  animation: h1Animate ease-in-out 2s infinite alternate;
+}
+
+@keyframes h1Animate {
+  0% {
+      background-position: top left;
+  }
+  50% {
+    background-position: center center;
+  }
+  100% {
+      background-position: right bottom;
+  }
+}
+
 .game_container {
+  position: relative;
   --square: clamp(120px, 84vw + 1rem, 500px);
   --square_init: calc(var(--square) * 0.333);
   --square_commit: calc(var(--square_init) + 0.02rem);
   width: var(--square);
   height: var(--square);
-  background-color: black;
+  background-color: white;
   display: grid;
   grid-template-columns: repeat(3, var(--square_commit));
   grid-template-rows: repeat(3, var(--square_commit));
@@ -47,32 +77,40 @@ body {
   justify-content: center;
   font-size: clamp(45px, 14vw + 1rem, 95px);
   font-weight: 700;
+  border: .1rem solid #dadada;
 }
 
-.box:nth-child(1) {
-  background-color: #ffabab;
+#game_over_window {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: white;
 }
-.box:nth-child(2) {
-  background-color: #9a9aff;
+.win_card,
+.restart_btn {
+  font-weight: 600;
+  text-align: center;
 }
-.box:nth-child(3) {
-  background-color: lightgreen;
+
+.win_card {
+  font-size: clamp(3.5rem, 7vw + 0.5rem, 9.5rem);
 }
-.box:nth-child(4) {
-  background-color: lightskyblue;
+
+.restart_btn {
+  padding: 0.8rem 2.4rem;
+  font-size: clamp(2rem, 5vw + 0.5rem, 5rem);
+  border: transparent;
+  outline: transparent;
+  border-radius: 0.5rem;
+  background: #00ffa6;
+  color: white;
+  transition: all 500ms ease-out;
 }
-.box:nth-child(5) {
-  background-color: rgb(255, 255, 148);
-}
-.box:nth-child(6) {
-  background-color: rgb(174, 240, 240);
-}
-.box:nth-child(7) {
-  background-color: #6577ab;
-}
-.box:nth-child(8) {
-  background-color: rgb(228, 184, 140);
-}
-.box:nth-child(9) {
-  background-color: rgb(255, 108, 138);
+
+.restart_btn:hover,
+.restart_btn:focus,
+.restart_btn:focus-visible,
+.restart_btn:focus-within {
+  box-shadow: .5rem .5rem 0 #00a76c;
 }
